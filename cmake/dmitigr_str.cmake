@@ -35,7 +35,6 @@ set(dmitigr_str_headers
   sequence.hpp
   stream.hpp
   substr.hpp
-  time.hpp
   transform.hpp
   )
 
