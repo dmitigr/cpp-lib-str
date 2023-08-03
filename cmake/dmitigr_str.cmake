@@ -49,6 +49,6 @@ set(dmitigr_libs_str_deps base)
 # ------------------------------------------------------------------------------
 
 if(DMITIGR_LIBS_TESTS)
-  set(dmitigr_str_tests test time)
+  set(dmitigr_str_tests test)
   set(dmitigr_str_tests_target_link_libraries dmitigr_base)
 endif()
