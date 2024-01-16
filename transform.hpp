@@ -68,9 +68,8 @@ inline void eliminate_duplicates(std::string& str)
     const char ch = str[i];
     const auto b = begin(str) + i + 1;
     const auto e = begin(str) + new_size;
-    const bool is_non_unique = find(b, e, ch) != e;
-    if (is_non_unique) {
-      remove_if(b, e, [ch, &new_size](const char c)
+    if (const auto it = find(b, e, ch); it != e) {
+      (void)remove_if(it, e, [ch, &new_size](const char c)
       {
         if (c == ch) {
           --new_size;
