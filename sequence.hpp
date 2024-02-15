@@ -30,19 +30,19 @@ namespace dmitigr::str {
 
 /// @returns The string with stringified elements of the sequence in range `[b, e)`.
 template<class InputIterator, typename Function>
-std::string to_string(const InputIterator b, const InputIterator e,
+std::string to_string(InputIterator b, const InputIterator e,
   const std::string_view sep, const Function& to_str)
 {
   std::string result;
   if (b != e) {
-    auto i = b;
-    for (; i != e; ++i) {
-      result.append(to_str(*i));
-      result.append(sep);
+    while (true) {
+      result.append(to_str(*b));
+      ++b;
+      if (b != e)
+        result.append(sep);
+      else
+        break;
     }
-    const auto sep_size = sep.size();
-    for (std::string::size_type j{}; j < sep_size; ++j)
-      result.pop_back();
   }
   return result;
 }
