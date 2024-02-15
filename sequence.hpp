@@ -79,20 +79,20 @@ template<class T, typename F>
 std::vector<T> to_vector(const std::string_view input,
   const std::string_view separators, const F& to_type)
 {
+  using Size = std::string_view::size_type;
   std::vector<T> result;
   result.reserve(8);
-  std::string_view::size_type pos{std::string_view::npos};
-  std::string_view::size_type offset{};
+  Size pos{std::string_view::npos};
+  Size offset{};
   while (offset < input.size()) {
     pos = input.find_first_of(separators, offset);
     DMITIGR_ASSERT(offset <= pos);
-    const auto part_size =
-      std::min<std::string_view::size_type>(pos, input.size()) - offset;
+    const auto part_size = std::min<Size>(pos, input.size()) - offset;
     result.push_back(to_type(input.substr(offset, part_size)));
     offset += part_size + 1;
   }
   if (pos != std::string_view::npos) // input ends with a separator
-    result.emplace_back();
+    result.push_back(to_type(std::string_view{}));
   return result;
 }
 
