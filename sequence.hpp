@@ -66,17 +66,21 @@ std::string to_string(const Container& cont, const std::string_view sep)
 }
 
 /**
- * @brief Splits the `input` string into the parts separated by the
+ * @brief Splits the `input` string into the parts by using the
  * specified `separators`.
  *
- * @returns The vector of splitted parts.
+ * @param input An input string.
+ * @param separators Separators.
+ * @param to_type A converter from std::string_view to T.
+ *
+ * @returns The vector of splitted parts converted to T.
  */
-template<class S = std::string>
-inline std::vector<S> to_vector(const std::string_view input,
-  const std::string_view separators)
+template<class T, typename F>
+std::vector<T> to_vector(const std::string_view input,
+  const std::string_view separators, const F& to_type)
 {
-  std::vector<S> result;
-  result.reserve(4);
+  std::vector<T> result;
+  result.reserve(8);
   std::string_view::size_type pos{std::string_view::npos};
   std::string_view::size_type offset{};
   while (offset < input.size()) {
@@ -84,12 +88,25 @@ inline std::vector<S> to_vector(const std::string_view input,
     DMITIGR_ASSERT(offset <= pos);
     const auto part_size =
       std::min<std::string_view::size_type>(pos, input.size()) - offset;
-    result.push_back(S{input.substr(offset, part_size)});
+    result.push_back(to_type(input.substr(offset, part_size)));
     offset += part_size + 1;
   }
   if (pos != std::string_view::npos) // input ends with a separator
     result.emplace_back();
   return result;
+}
+
+/**
+ * @brief Splits the `input` string into the parts separated by the
+ * specified `separators`.
+ *
+ * @returns The vector of splitted parts.
+ */
+template<class S = std::string>
+std::vector<S> to_vector(const std::string_view input,
+  const std::string_view separators)
+{
+  return to_vector<S>(input, separators, [](const auto& v){return S{v};});
 }
 
 } // namespace dmitigr::str
