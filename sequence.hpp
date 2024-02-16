@@ -86,7 +86,6 @@ std::vector<T> to_vector(const std::string_view input,
   Size offset{};
   while (offset < input.size()) {
     pos = input.find_first_of(separators, offset);
-    DMITIGR_ASSERT(offset <= pos);
     const auto part_size = std::min<Size>(pos, input.size()) - offset;
     result.push_back(to_type(input.substr(offset, part_size)));
     offset += part_size + 1;
