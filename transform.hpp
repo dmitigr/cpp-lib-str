@@ -209,11 +209,12 @@ inline std::string to_string(const std::string_view input,
     input.size()*elem_sz + // for bytes in result_format
     input.size()*separator.size() // for separators
                 );
+  auto* const in = reinterpret_cast<const unsigned char*>(input.data());
   for (std::string_view::size_type i{}; i < input.size(); ++i) {
     const auto res = result.data() + elem_sz*i + separator.size()*i;
     DMITIGR_ASSERT(res - result.data() + elem_sz + separator.size()
       <= result.size());
-    const int count = std::sprintf(res, fmt_str, input[i]);
+    const int count = std::sprintf(res, fmt_str, in[i]);
     DMITIGR_ASSERT(count == elem_sz);
     std::strncpy(res + count, separator.data(), separator.size());
   }
