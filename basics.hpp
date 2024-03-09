@@ -20,14 +20,21 @@
 #include "../base/enum_bitmask.hpp"
 
 namespace dmitigr {
-
 namespace str {
+
 /// Denotes trimming mode bitmask.
 enum class Trim {
   lhs = 1,
   rhs,
   all
 };
+
+/// Denotes a byte format.
+enum class Byte_format {
+  raw = 1,
+  hex
+};
+
 } // namespace str
 
 template<> struct Is_bitmask_enum<str::Trim> : std::true_type {};
