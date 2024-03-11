@@ -139,12 +139,19 @@ int main()
     }
 
     // -------------------------------------------------------------------------
-    // Convert to Hex
+    // Sparse
     // -------------------------------------------------------------------------
 
     {
+      const char* bytes{""};
+      const auto v = str::sparsed_string(std::string_view{bytes, 0},
+        str::Byte_format::hex, ":");
+      DMITIGR_ASSERT(v.size() == 0);
+    }
+
+    {
       char bytes[] = {1,2,3};
-      const auto v = str::to_string(std::string_view{bytes, sizeof(bytes)},
+      const auto v = str::sparsed_string(std::string_view{bytes, sizeof(bytes)},
         str::Byte_format::hex, ":");
       DMITIGR_ASSERT(v.size() == 3*2 + 3-1);
       DMITIGR_ASSERT(v.substr(0, 2) == "01");
@@ -153,6 +160,17 @@ int main()
       DMITIGR_ASSERT(v.substr(5, 1) == ":");
       DMITIGR_ASSERT(v.substr(6, 2) == "03");
       std::cout << v << std::endl;
+    }
+
+    {
+      char bytes[] = {'d','i','m','a'};
+      const auto v = str::sparsed_string(std::string_view{bytes, sizeof(bytes)},
+        str::Byte_format::raw, "");
+      DMITIGR_ASSERT(v.size() == 4);
+      DMITIGR_ASSERT(v[0] == 'd');
+      DMITIGR_ASSERT(v[1] == 'i');
+      DMITIGR_ASSERT(v[2] == 'm');
+      DMITIGR_ASSERT(v[3] == 'a');
     }
 
   } catch (const std::exception& e) {

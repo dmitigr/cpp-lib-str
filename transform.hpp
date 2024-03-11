@@ -37,11 +37,36 @@ namespace dmitigr::str {
 // -----------------------------------------------------------------------------
 
 /// @returns The string with the specified `delimiter` between the characters.
-inline std::string
-sparsed_string(const std::string_view input, const std::string_view delimiter)
+inline std::string sparsed_string(const std::string_view input,
+  const Byte_format result_format, const std::string_view delimiter = "")
 {
+#define DMITIGR_STR_TO_STRING\
+  " dmitigr::str::to_string(string_view, Byte_format, string_view)"
+  if (!input.data())
+    throw std::invalid_argument{"invalid input for" DMITIGR_STR_TO_STRING};
+  else if (!delimiter.data())
+    throw std::invalid_argument{"invalid delimiter for" DMITIGR_STR_TO_STRING};
+
+  const auto [elem_sz, fmt_str] = [result_format]
+  {
+    switch (result_format) {
+    case Byte_format::raw: return std::make_pair(1, "%c");
+    case Byte_format::hex: return std::make_pair(2, "%02x");
+    }
+    throw std::invalid_argument{"unsupported result format for" DMITIGR_STR_TO_STRING};
+  }();
+#undef DMITIGR_STR_TO_STRING
+
+  if (input.empty())
+    return std::string{};
+
   std::string result;
-  if (!input.empty()) {
+
+  // Go fast path if `raw`.
+  if (result_format == Byte_format::raw) {
+    if (delimiter.empty())
+      return std::string{input};
+
     result.reserve(input.size() + (input.size() - 1) * delimiter.size());
     auto i = cbegin(input);
     auto const e = cend(input) - 1;
@@ -50,7 +75,24 @@ sparsed_string(const std::string_view input, const std::string_view delimiter)
       result += delimiter;
     }
     result += *i;
+    return result;
   }
+
+  // Go generic path.
+  result.resize(
+    input.size()*elem_sz + // for bytes in result_format
+    input.size()*delimiter.size() // for delimiters
+                );
+  for (std::string_view::size_type i{}; i < input.size(); ++i) {
+    const auto res = result.data() + elem_sz*i + delimiter.size()*i;
+    DMITIGR_ASSERT(res - result.data() + elem_sz + delimiter.size()
+      <= result.size());
+    const int count = std::sprintf(res, fmt_str,
+      static_cast<unsigned char>(input[i]));
+    DMITIGR_ASSERT(count == elem_sz);
+    std::strncpy(res + count, delimiter.data(), delimiter.size());
+  }
+  result.resize(result.size() - delimiter.size());
   return result;
 }
 
@@ -177,49 +219,6 @@ inline bool is_uppercased(const std::string_view str) noexcept
   {
     return isupper(c);
   });
-}
-
-// -----------------------------------------------------------------------------
-
-inline std::string to_string(const std::string_view input,
-  const Byte_format result_format, const std::string_view separator = "")
-{
-#define DMITIGR_STR_TO_STRING\
-  " dmitigr::str::to_string(string_view, Byte_format, string_view)"
-  if (!input.data())
-    throw std::invalid_argument{"invalid input for" DMITIGR_STR_TO_STRING};
-  else if (!separator.data())
-    throw std::invalid_argument{"invalid separator for" DMITIGR_STR_TO_STRING};
-
-  const auto [elem_sz, fmt_str] = [result_format]
-  {
-    switch (result_format) {
-    case Byte_format::hex: return std::make_pair(2, "%02x");
-    case Byte_format::raw: break;
-    }
-    throw std::invalid_argument{"unsupported result format for" DMITIGR_STR_TO_STRING};
-  }();
-#undef DMITIGR_STR_TO_STRING
-
-  if (input.empty())
-    return std::string{};
-
-  std::string result;
-  result.resize(
-    input.size()*elem_sz + // for bytes in result_format
-    input.size()*separator.size() // for separators
-                );
-  for (std::string_view::size_type i{}; i < input.size(); ++i) {
-    const auto res = result.data() + elem_sz*i + separator.size()*i;
-    DMITIGR_ASSERT(res - result.data() + elem_sz + separator.size()
-      <= result.size());
-    const int count = std::sprintf(res, fmt_str,
-      static_cast<unsigned char>(input[i]));
-    DMITIGR_ASSERT(count == elem_sz);
-    std::strncpy(res + count, separator.data(), separator.size());
-  }
-  result.resize(result.size() - separator.size());
-  return result;
 }
 
 } // namespace dmitigr::str
