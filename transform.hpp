@@ -38,27 +38,12 @@ namespace dmitigr::str {
 
 /// @returns The string with the specified `delimiter` between the characters.
 inline std::string sparsed_string(const std::string_view input,
-  const Byte_format result_format, const std::string_view delimiter = "")
+  const Byte_format result_format, std::string_view delimiter = "")
 {
-#define DMITIGR_STR_TO_STRING\
-  " dmitigr::str::to_string(string_view, Byte_format, string_view)"
-  if (!input.data())
-    throw std::invalid_argument{"invalid input for" DMITIGR_STR_TO_STRING};
-  else if (!delimiter.data())
-    throw std::invalid_argument{"invalid delimiter for" DMITIGR_STR_TO_STRING};
-
-  const auto [elem_sz, fmt_str] = [result_format]
-  {
-    switch (result_format) {
-    case Byte_format::raw: return std::make_pair(1, "%c");
-    case Byte_format::hex: return std::make_pair(2, "%02x");
-    }
-    throw std::invalid_argument{"unsupported result format for" DMITIGR_STR_TO_STRING};
-  }();
-#undef DMITIGR_STR_TO_STRING
-
-  if (input.empty())
+  if (!input.data() || input.empty())
     return std::string{};
+  else if (!delimiter.data())
+    delimiter = "";
 
   std::string result;
 
@@ -79,6 +64,16 @@ inline std::string sparsed_string(const std::string_view input,
   }
 
   // Go generic path.
+  const auto [elem_sz, fmt_str] = [result_format]
+  {
+    switch (result_format) {
+    case Byte_format::raw: return std::make_pair(1, "%c");
+    case Byte_format::hex: return std::make_pair(2, "%02x");
+    }
+    throw std::invalid_argument{"unsupported result format for"
+      " dmitigr::str::to_string(string_view, Byte_format, string_view)"};
+  }();
+
   result.resize(
     input.size()*elem_sz + // for bytes in result_format
     input.size()*delimiter.size() // for delimiters
