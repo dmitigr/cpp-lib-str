@@ -36,6 +36,7 @@ set(dmitigr_str_headers
   stream.hpp
   substr.hpp
   transform.hpp
+  walker.hpp
   )
 
 # ------------------------------------------------------------------------------

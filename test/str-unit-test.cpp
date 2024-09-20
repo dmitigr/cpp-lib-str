@@ -17,6 +17,7 @@
 #include "../../base/assert.hpp"
 #include "../../str/sequence.hpp"
 #include "../../str/transform.hpp"
+#include "../../str/walker.hpp"
 
 int main()
 {
@@ -173,6 +174,17 @@ int main()
       DMITIGR_ASSERT(v[3] == 'a');
     }
 
+    // -------------------------------------------------------------------------
+    // Walker
+    // -------------------------------------------------------------------------
+
+    {
+      str::Walker w{"1,2,3", ","};
+      DMITIGR_ASSERT(w.next() == "1");
+      DMITIGR_ASSERT(w.next() == "2");
+      DMITIGR_ASSERT(w.next() == "3");
+      DMITIGR_ASSERT(w.next().empty());
+    }
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
     return 1;
