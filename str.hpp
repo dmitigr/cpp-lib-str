@@ -27,7 +27,7 @@
 #include "sequence.hpp"
 #include "stream.hpp"
 #include "substr.hpp"
-#include "time.hpp"
 #include "transform.hpp"
+#include "walker.hpp"
 
 #endif  // DMITIGR_STR_STR_HPP
