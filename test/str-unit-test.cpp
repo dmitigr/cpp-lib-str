@@ -23,6 +23,7 @@ int main()
 {
   try {
     namespace str = dmitigr::str;
+    using namespace std::literals;
 
     // -------------------------------------------------------------------------
     // trim
@@ -32,42 +33,63 @@ int main()
     {
       auto s = str::trimmed("");
       DMITIGR_ASSERT(s.empty());
+
+      auto sv = str::trimmed(""sv);
+      DMITIGR_ASSERT(sv.empty());
     }
 
     // String with only spaces
     {
       auto s = str::trimmed(" \f\n\r\t\v");
       DMITIGR_ASSERT(s.empty());
+
+      auto sv = str::trimmed(" \f\n\r\t\v"sv);
+      DMITIGR_ASSERT(sv.empty());
     }
 
     // String without spaces
     {
       auto s = str::trimmed("content");
       DMITIGR_ASSERT(s == "content");
+
+      auto sv = str::trimmed("content"sv);
+      DMITIGR_ASSERT(sv == "content");
     }
 
     // String with spaces from left
     {
       auto s = str::trimmed(" \f\n\r\t\vcontent");
       DMITIGR_ASSERT(s == "content");
+
+      auto sv = str::trimmed(" \f\n\r\t\vcontent"sv);
+      DMITIGR_ASSERT(sv == "content");
     }
 
     // String with spaces from right
     {
       auto s = str::trimmed("content \f\n\r\t\v");
       DMITIGR_ASSERT(s == "content");
+
+      auto sv = str::trimmed("content \f\n\r\t\v"sv);
+      DMITIGR_ASSERT(sv == "content");
     }
 
     // String with spaces from both sides
     {
       auto s = str::trimmed(" \f\n\r\t\vcontent \f\n\r\t\v");
       DMITIGR_ASSERT(s == "content");
+
+      auto sv = str::trimmed(" \f\n\r\t\vcontent \f\n\r\t\v"sv);
+      DMITIGR_ASSERT(sv == "content");
     }
 
     // String with spaces from both sides with spaces in the content
     {
       auto s = str::trimmed(" \f\n\r\t\vcon ten t \f\n\r\t\v");
       DMITIGR_ASSERT(s == "con ten t");
+
+      auto sv = str::trimmed(" \f\n\r\t\vcon ten t \f\n\r\t\v"sv);
+      DMITIGR_ASSERT(sv == "con ten t");
     }
 
     // -------------------------------------------------------------------------

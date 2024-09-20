@@ -150,6 +150,29 @@ inline std::string trimmed(std::string str, const Trim trim = Trim::all)
   return str;
 }
 
+/// @overload
+template<typename CharT, class Traits>
+inline std::basic_string_view<CharT, Traits>
+trimmed(const std::basic_string_view<CharT, Traits> str,
+  const Trim trim = Trim::all) noexcept
+{
+  if (str.empty())
+    return str;
+
+  const auto b = cbegin(str);
+  const auto e = cend(str);
+  const auto tb = static_cast<bool>(trim & Trim::lhs) ?
+    std::find_if(b, e, is_non_space<char>) : b;
+  if (tb == e) {
+    // The string consists of spaces, so just return empty subview.
+    return str.substr(0, 0);
+  }
+  const auto te = static_cast<bool>(trim & Trim::rhs) ?
+    std::find_if(rbegin(str), rend(str), is_non_space<char>).base() : e;
+  const auto new_size = te - tb;
+  return str.substr(tb - b, new_size);
+}
+
 // -----------------------------------------------------------------------------
 // lowercase
 
