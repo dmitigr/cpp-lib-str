@@ -135,7 +135,7 @@ std::string read_to_string(std::istream& input, const std::optional<Trim> trim =
   if (trim && static_cast<bool>(*trim & Trim::rhs)) {
     const auto rb = crbegin(result);
     const auto re = crend(result);
-    const auto te = find_if(rb, re, is_non_space<char>).base();
+    const auto te = find_if(rb, re, is_non_space).base();
     result.resize(te - cbegin(result));
   }
 

@@ -28,36 +28,49 @@ namespace dmitigr::str {
 // -----------------------------------------------------------------------------
 
 /// @returns `true` if `c` is a valid space character.
-template<typename Ch>
-bool is_space(const Ch ch) noexcept
+inline bool is_space(const int ch) noexcept
 {
-  return std::isspace(static_cast<unsigned char>(ch));
+  return std::isspace(ch);
 }
 
 /// @returns `!is_space(ch)`.
-template<typename Ch>
-bool is_non_space(const Ch ch) noexcept
+inline bool is_non_space(const int ch) noexcept
 {
   return !is_space(ch);
 }
 
 /// @returns `true` if `c` is printable character.
-template<typename Ch>
-bool is_printable(const Ch ch) noexcept
+inline bool is_printable(const int ch) noexcept
 {
-  return std::isprint(static_cast<unsigned char>(ch));
+  return std::isprint(ch);
+}
+
+/// @returns `!is_printable(ch)`.
+inline bool is_non_printable(const int ch) noexcept
+{
+  return !is_printable(ch);
+}
+
+/// @returns `true` if `c` is printable character and not space.
+inline bool is_visible(const int ch) noexcept
+{
+  return std::isprint(ch) && is_non_space(ch);
+}
+
+/// @returns `!is_visible(ch)`.
+inline bool is_non_visible(const int ch) noexcept
+{
+  return !is_visible(ch);
 }
 
 /// @returns `true` if `c` is a zero character.
-template<typename Ch>
-bool is_zero(const Ch ch) noexcept
+inline bool is_zero(const int ch) noexcept
 {
-  return ch == '\0';
+  return !ch;
 }
 
 /// @returns `true` if `c` is a non zero character.
-template<typename Ch>
-bool is_non_zero(const Ch ch) noexcept
+inline bool is_non_zero(const int ch) noexcept
 {
   return !is_zero(ch);
 }
@@ -65,13 +78,13 @@ bool is_non_zero(const Ch ch) noexcept
 /// @returns `true` if `str` is a blank string.
 inline bool is_blank(const std::string_view str) noexcept
 {
-  return std::all_of(cbegin(str), cend(str), is_space<char>);
+  return std::all_of(cbegin(str), cend(str), is_space);
 }
 
 /// @returns `true` if `str` has at least one space character.
 inline bool has_space(const std::string_view str) noexcept
 {
-  return std::any_of(cbegin(str), cend(str), is_space<char>);
+  return std::any_of(cbegin(str), cend(str), is_space);
 }
 
 /// @returns `true` if `input` is starting with `pattern`.
