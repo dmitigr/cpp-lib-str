@@ -162,7 +162,7 @@ void trim(std::string& str, const Trim tr, const Predicate& predicate)
 /// @overload
 inline void trim(std::string& str, const Trim tr = Trim::all)
 {
-  trim(str, tr, is_non_visible);
+  trim(str, tr, is_not_visible);
 }
 
 /// @returns The result of call `trim(str, tr, predicate)`.
@@ -176,7 +176,7 @@ std::string trimmed(std::string str, const Trim tr, const Predicate& predicate)
 /// @overload
 inline std::string trimmed(std::string str, const Trim tr = Trim::all)
 {
-  return trimmed(str, tr, is_non_visible);
+  return trimmed(str, tr, is_not_visible);
 }
 
 /// @overload
@@ -208,7 +208,7 @@ std::basic_string_view<CharT, Traits>
 trimmed(const std::basic_string_view<CharT, Traits> str,
   const Trim tr = Trim::all) noexcept
 {
-  return trimmed(str, tr, is_non_visible);
+  return trimmed(str, tr, is_not_visible);
 }
 
 // -----------------------------------------------------------------------------

@@ -34,7 +34,7 @@ inline bool is_space(const int ch) noexcept
 }
 
 /// @returns `!is_space(ch)`.
-inline bool is_non_space(const int ch) noexcept
+inline bool is_not_space(const int ch) noexcept
 {
   return !is_space(ch);
 }
@@ -46,7 +46,7 @@ inline bool is_printable(const int ch) noexcept
 }
 
 /// @returns `!is_printable(ch)`.
-inline bool is_non_printable(const int ch) noexcept
+inline bool is_not_printable(const int ch) noexcept
 {
   return !is_printable(ch);
 }
@@ -54,11 +54,11 @@ inline bool is_non_printable(const int ch) noexcept
 /// @returns `true` if `c` is printable character and not space.
 inline bool is_visible(const int ch) noexcept
 {
-  return std::isprint(ch) && is_non_space(ch);
+  return std::isprint(ch) && is_not_space(ch);
 }
 
 /// @returns `!is_visible(ch)`.
-inline bool is_non_visible(const int ch) noexcept
+inline bool is_not_visible(const int ch) noexcept
 {
   return !is_visible(ch);
 }
@@ -69,8 +69,8 @@ inline bool is_zero(const int ch) noexcept
   return !ch;
 }
 
-/// @returns `true` if `c` is a non zero character.
-inline bool is_non_zero(const int ch) noexcept
+/// @returns `true` if `c` is a not zero character.
+inline bool is_not_zero(const int ch) noexcept
 {
   return !is_zero(ch);
 }
