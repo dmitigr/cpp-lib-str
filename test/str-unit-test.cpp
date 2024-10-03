@@ -15,9 +15,7 @@
 // limitations under the License.
 
 #include "../../base/assert.hpp"
-#include "../../str/sequence.hpp"
-#include "../../str/transform.hpp"
-#include "../../str/walker.hpp"
+#include "../../str/str.hpp"
 
 int main()
 {

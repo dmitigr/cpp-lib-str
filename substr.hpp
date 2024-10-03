@@ -45,7 +45,7 @@ first_non_space_pos(const std::string_view str, const std::string_view::size_typ
 
   const auto b = cbegin(str);
   const auto e = cend(str);
-  const auto i = std::find_if(b + pos, e, is_non_space<char>);
+  const auto i = std::find_if(b + pos, e, is_not_space);
   return i != e ? static_cast<std::string_view::size_type>(i - b)
     : std::string_view::npos;
 }
