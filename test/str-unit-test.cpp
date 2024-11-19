@@ -194,6 +194,14 @@ int main()
       DMITIGR_ASSERT(v[3] == 'a');
     }
 
+    {
+      char bytes[] = {'d','i','m','a'};
+      const auto v = str::sparsed_string(std::string_view{bytes, sizeof(bytes)},
+        str::Byte_format::hex, "");
+      DMITIGR_ASSERT(v.size() == 4*2);
+      DMITIGR_ASSERT(v == "64696d61");
+    }
+
     // -------------------------------------------------------------------------
     // Walker
     // -------------------------------------------------------------------------

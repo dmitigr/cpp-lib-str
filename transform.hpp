@@ -77,18 +77,19 @@ inline std::string sparsed_string(const std::string_view input,
 
   result.resize(
     input.size()*elem_sz + // for bytes in result_format
+    1 + // for `\0` written by std::snprintf()
     input.size()*delimiter.size() // for delimiters
                 );
   for (std::string_view::size_type i{}; i < input.size(); ++i) {
     const auto res = result.data() + elem_sz*i + delimiter.size()*i;
     DMITIGR_ASSERT(res - result.data() + elem_sz + delimiter.size()
       <= result.size());
-    const int count = std::sprintf(res, fmt_str,
+    const int count = std::snprintf(res, elem_sz + 1, fmt_str,
       static_cast<unsigned char>(input[i]));
     DMITIGR_ASSERT(count == elem_sz);
     std::strncpy(res + count, delimiter.data(), delimiter.size());
   }
-  result.resize(result.size() - delimiter.size());
+  result.resize(result.size() - 1 - delimiter.size());
   return result;
 }
 
