@@ -46,6 +46,12 @@ inline const char* literal(const char* const literal) noexcept
   return literal ? literal : "";
 }
 
+/// @returns The specified `value` if `(value != nullptr)`, or `L""` otherwise.
+inline auto* value_or_empty(const wchar_t* const value) noexcept
+{
+  return value ? value : L"";
+}
+
 /**
  * @returns The first non-null string literal of specified literals, or
  * `nullptr` if all of the `literals` are nulls.
