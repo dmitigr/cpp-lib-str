@@ -17,8 +17,6 @@
 #ifndef DMITIGR_STR_C_STR_HPP
 #define DMITIGR_STR_C_STR_HPP
 
-#include "predicate.hpp"
-
 #include <cctype>
 #include <cwctype>
 #include <initializer_list>
