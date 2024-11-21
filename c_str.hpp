@@ -19,6 +19,8 @@
 
 #include "predicate.hpp"
 
+#include <cctype>
+#include <cwctype>
 #include <initializer_list>
 
 namespace dmitigr::str {
@@ -31,36 +33,56 @@ namespace dmitigr::str {
  * @returns The pointer to a next non-space character, or pointer to the
  * terminating zero character.
  */
-inline const char* next_non_space_pointer(const char* p) noexcept
+inline auto* next_non_space_pointer(const char* p) noexcept
 {
   if (p) {
-    while (*p != '\0' && is_space(*p))
+    while (*p && std::isspace(*p))
       ++p;
   }
   return p;
 }
 
-/// @returns The specified literal if `(literal != nullptr)`, or "" otherwise.
-inline const char* literal(const char* const literal) noexcept
+/// @overload
+inline auto* next_non_space_pointer(const wchar_t* p) noexcept
 {
-  return literal ? literal : "";
+  if (p) {
+    while (*p && std::iswspace(*p))
+      ++p;
+  }
+  return p;
 }
 
-/// @returns The specified `value` if `(value != nullptr)`, or `L""` otherwise.
+/// @returns The specified `value` if `(value != nullptr)`, or `""` otherwise.
+inline auto* value_or_empty(const char* const value) noexcept
+{
+  return value ? value : "";
+}
+
+/// @overload
 inline auto* value_or_empty(const wchar_t* const value) noexcept
 {
   return value ? value : L"";
 }
 
 /**
- * @returns The first non-null string literal of specified literals, or
- * `nullptr` if all of the `literals` are nulls.
+ * @returns The first non-null value of specified `values`, or `nullptr` if all
+ * the `values` are nulls.
  */
-inline const char* coalesce(std::initializer_list<const char*> literals) noexcept
+inline const char* coalesce(std::initializer_list<const char*> values) noexcept
 {
-  for (const auto l : literals) {
-    if (l)
-      return l;
+  for (const auto value : values) {
+    if (value)
+      return value;
+  }
+  return nullptr;
+}
+
+/// @overload
+inline const wchar_t* coalesce(std::initializer_list<const wchar_t*> values) noexcept
+{
+  for (const auto value : values) {
+    if (value)
+      return value;
   }
   return nullptr;
 }
