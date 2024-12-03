@@ -18,7 +18,7 @@
 #define DMITIGR_STR_STREAM_HPP
 
 #include "../base/ret.hpp"
-#include "../fsx/filesystem.hpp"
+#include "../base/fsx.hpp"
 #include "basics.hpp"
 #include "exceptions.hpp"
 #include "predicate.hpp"
