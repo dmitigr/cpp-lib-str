@@ -93,16 +93,6 @@ inline std::string sparsed_string(const std::string_view input,
   return result;
 }
 
-/**
- * @par Effects
- * `str.back() == c`.
- */
-inline void terminate(std::string& str, const char c)
-{
-  if (str.empty() || str.back() != c)
-    str += c;
-}
-
 /// Eliminates duplicate characters from string `str`.
 inline void eliminate_duplicates(std::string& str)
 {
