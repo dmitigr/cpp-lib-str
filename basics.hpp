@@ -17,7 +17,7 @@
 #ifndef DMITIGR_STR_BASICS_HPP
 #define DMITIGR_STR_BASICS_HPP
 
-#include "../base/enum_bitmask.hpp"
+#include "../base/enum.hpp"
 
 namespace dmitigr {
 namespace str {
